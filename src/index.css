@@ -1,0 +1,136 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  
+  --color-1: #eb6782;
+  --color-2: #d7c82b;
+  --color-3: #33aba0;
+  --color-4: #295ba7;
+  --color-5: #3d5786;
+
+
+}
+
+body {
+  min-height: 100vh;
+  font-family: canada-type-gibson, sans-serif;
+  font-weight: 300;
+  font-size: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #22272e;
+}
+
+.content {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.text_shadows {
+  text-shadow: 3px 3px 0 var(--color-1), 6px 6px 0 var(--color-2),
+    9px 9px var(--color-3), 12px 12px 0 var(--color-4);
+  font-family: 'Bungee', sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: calc(2rem + 5vw);
+  text-align: center;
+  margin: 0;
+  color: #22272e;
+  /* color: transparent;*/
+  /* background-color: white;*/
+  /*background-clip: text;*/
+  animation: shadows 2s ease-in infinite, move 2s ease-in infinite;
+  letter-spacing: 0.2rem;
+}
+
+@keyframes shadows {
+  0% {
+    text-shadow: none;
+  }
+  10% {
+    text-shadow: 3px 3px 0 var(--color-1);
+  }
+  20% {
+    text-shadow: 3px 3px 0 var(--color-1),
+      6px 6px 0 var(--color-2);
+  }
+  30% {
+    text-shadow: 3px 3px 0 var(--color-1),
+      6px 6px 0 var(--color-2), 9px 9px var(--color-3);
+  }
+  40% {
+    text-shadow: 3px 3px 0 var(--color-1),
+      6px 6px 0 var(--color-2), 9px 9px var(--color-3),
+      12px 12px 0 var(--color-4);
+  }
+  50% {
+    text-shadow: 3px 3px 0 var(--color-1),
+      6px 6px 0 var(--color-2), 9px 9px var(--color-3),
+      12px 12px 0 var(--color-4);
+  }
+  60% {
+    text-shadow: 3px 3px 0 var(--color-1),
+      6px 6px 0 var(--color-2), 9px 9px var(--color-3),
+      12px 12px 0 var(--color-4);
+  }
+  70% {
+    text-shadow: 3px 3px 0 var(--color-1),
+      6px 6px 0 var(--color-2), 9px 9px var(--color-3);
+  }
+  80% {
+    text-shadow: 3px 3px 0 var(--color-1),
+      6px 6px 0 var(--color-2);
+  }
+  90% {
+    text-shadow: 3px 3px 0 var(--color-1);
+  }
+  100% {
+    text-shadow: none;
+  }
+}
+
+@keyframes move {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  40% {
+    transform: translate(-12px, -12px);
+  }
+  50% {
+    transform: translate(-12px, -12px);
+  }
+  60% {
+    transform: translate(-12px, -12px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+
+.text_pulsate {
+  text-align: center;
+}
+
+.cursor {
+  animation: animate 0.8s ease-in-out infinite;
+}
+ 
+@keyframes animate{
+  0%{
+    opacity: 0;
+  }
+  50%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
