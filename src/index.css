@@ -50,6 +50,17 @@ body {
   letter-spacing: 0.2rem;
 }
 
+canvas {
+  border: 2px solid white;
+}
+#container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+}
+
 @keyframes shadows {
   0% {
     text-shadow: none;
