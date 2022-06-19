@@ -8,7 +8,7 @@ const algorithm = 'aes-256-cfb'
 
 const GameSelect: React.FC = () => {
 
-    const games = ["game-1", "game-2"]
+    const games = ["game-1", "game-2", "conways", "conway"]
 
     const [gameSelection, _setGameSelection] = useState(0)
 
@@ -89,11 +89,20 @@ const GameSelect: React.FC = () => {
         // Decrypt encrypted game data
         const decryptedWASM = decrypt("test", algorithm, encryptedWASM).data
 
-        // Create and instantiate the wasm module from buffer.
-        const module = new WebAssembly.Module(decryptedWASM)
-        const instance = await WebAssembly.instantiate(module);
+        const blob = new Blob([decryptedWASM], { type: "application/wasm" });
+        const url = URL.createObjectURL(blob);
 
-        return (instance.exports as any)._Z3fibi(1)
+        var imports: any = {};
+        imports.wbg = {};
+        imports.wbg.__wbindgen_throw = (arg0, arg1) => {
+            throw new Error(`__wbindgen_throw(${arg0}, ${arg1})`);
+        };
+
+        const { module, instance } = await WebAssembly.instantiateStreaming(fetch(url), imports);
+
+        console.log(instance.exports, module)
+
+        return 1
     }
 
 
