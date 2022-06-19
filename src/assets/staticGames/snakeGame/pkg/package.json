@@ -1,0 +1,16 @@
+{
+  "name": "rust-js-snake-game",
+  "collaborators": [
+    "Rodion Chachura <geekrodion@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "rust_js_snake_game_bg.wasm",
+    "rust_js_snake_game.js",
+    "rust_js_snake_game_bg.js",
+    "rust_js_snake_game.d.ts"
+  ],
+  "module": "rust_js_snake_game.js",
+  "types": "rust_js_snake_game.d.ts",
+  "sideEffects": false
+}
