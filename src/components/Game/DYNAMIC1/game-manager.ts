@@ -1,4 +1,4 @@
-import { Game, Vector } from './pkg/DYNAMIC1';
+import { Game, Vector } from './wasm';
 
 import CONFIG from './config'
 import { View } from './view'

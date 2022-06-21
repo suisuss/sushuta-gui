@@ -3,6 +3,9 @@ import axios from "axios";
 import { createDecipher as decrypt } from "../../utils/encryptor";
 import SnakeGame from "../../assets/staticGames/snakeGame";
 
+import DYNAMIC1 from './DYNAMIC1/wasm'
+import { GameManager } from "./DYNAMIC1/game-manager";
+
 const algorithm = 'aes-256-cfb'
 
 // Different game type for different controller presets...
@@ -24,12 +27,18 @@ interface Props {
     setGameSelected: (data: GameObject | undefined) => void
 }
 
-const fetchGame = async (id: string, setInstance: any) => {
+const run = async (): Promise<GameManager> => {
+    const DYNAMIC1 = await import('./DYNAMIC1')
+    const gameInstance = await DYNAMIC1.default()
+    return gameInstance
+}
+
+const fetchGame = async (id: string, setGameInstance: any) => {
     console.log("FETCHING")
     try {
 
         // Recieved encrypted game file
-        const res = await axios.get(`http://localhost:4002/game/${id}`, {
+        const res = await axios.get(`http://localhost:4001/game/${id}`, {
             responseType: 'arraybuffer'
         })
 
@@ -46,19 +55,13 @@ const fetchGame = async (id: string, setInstance: any) => {
         const blob = new Blob([decryptedWASM], { type: "application/wasm" });
         const url = URL.createObjectURL(blob);
 
-        var imports: any = {};
-        imports.wbg = {};
-        imports.wbg.__wbindgen_throw = (arg0, arg1) => {
-            throw new Error(`__wbindgen_throw(${arg0}, ${arg1})`);
-        };
-        console.log(decryptedWASM)
+        const _wasmInstance = await DYNAMIC1(url);
 
-        /*
-        const { module, instance } = await WebAssembly.instantiateStreaming(fetch(url), imports);
+        window.URL.revokeObjectURL(url);
 
-        console.log(module, instance)
-        setInstance(instance)
-        */
+        const gameInstance = await run()
+
+        setGameInstance(gameInstance)
     } catch (e) {
         console.error(e)
     }
@@ -68,29 +71,25 @@ const fetchGame = async (id: string, setInstance: any) => {
 
 const Game: React.FC<Props> = ({ type, id, setGameSelected }) => {
 
-    const [instance, setInstance] = useState<undefined | WebAssembly.Instance>()
+    const [gameInstance, setGameInstance] = useState<GameManager | undefined>()
 
     if (type === GameType.STATIC) {
         return <SnakeGame />
     }
 
     const handleExit = () => {
+        console.log(gameInstance)
+        gameInstance.onStop()
         setGameSelected(undefined)
     }
 
     useEffect(() => {
-        if (instance) { return }
-        fetchGame(id, setInstance)
+        if (gameInstance) { return }
+        fetchGame(id, setGameInstance)
     }, [])
 
-    useEffect(() => { 
-        if (instance) {
-            console.log("GOT INSTANCE")  
-        }
-    }, [instance])
-
     return (
-        <>  
+        <>
             <button onClick={handleExit}>EXIT</button>
             <p>TYPE: {`${type}`}</p>
             <p>Now: <span id="current-score"></span></p>

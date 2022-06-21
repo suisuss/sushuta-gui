@@ -1,4 +1,4 @@
-import { Movement } from "./pkg/DYNAMIC1_BG";
+import { Movement } from "./wasm";
 
 
 export class Controller {
@@ -20,8 +20,8 @@ export class Controller {
           this.movement = Movement.RIGHT
           return
         case 'Escape':
-            onStop()
-            return
+          onStop()
+          return
         default:
           return;
       }
