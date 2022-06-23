@@ -4,7 +4,13 @@ import React, { useEffect, useState } from "react"
 import Game, { GameObject, GameType } from "../components/Game";
 
 
-const games: GameObject[] = [{ type: GameType.STATIC, id:"snake-static"}, { type: GameType.DYNAMIC1, id:"snake-dynamic1"}]
+const games: GameObject[] = [
+    { type: GameType.STATIC, id: "snake-static" },
+    { type: GameType.SNAKE, id: "snake-dynamic" },
+    { type: GameType.SNAKE, id: "snake2-dynamic" },
+    { type: GameType.DYNAMIC1, id: "something-dynamic1" },
+    { type: GameType.DYNAMIC1, id: "something2-dynamic1" }
+]
 
 const GameSelect: React.FC = () => {
 
@@ -73,7 +79,7 @@ const GameSelect: React.FC = () => {
     }, [gameSelected])
 
     if (gameSelected) {
-        return <Game type={gameSelected.type} id={gameSelected.id} setGameSelected={setGameSelected}/>
+        return <Game type={gameSelected.type} id={gameSelected.id} setGameSelected={setGameSelected} />
     }
 
     return (
@@ -82,7 +88,7 @@ const GameSelect: React.FC = () => {
             <div className="text_pulsate" style={{ fontSize: "24px", color: "white", fontFamily: "Bungee", width: "100%", display: "flex", flex: 1, flexDirection: "column", justifyContent: "flex-start" }}>
                 <div style={{ width: "400px", margin: "0 8rem auto auto" }}>
                     <div style={{ width: "fit", marginBottom: "1rem", textAlign: "left" }}>SELECT A GAME:</div>
-                    {games.map((game, i) => <div key={`${game.id}-${i}`}style={{ width: "300px", marginRight: "auto", textAlign: "left" }}><span className="cursor" style={{ color: (i !== gameSelectionIndex ? "transparent" : "white") }}>{'>'}</span>&nbsp;{game.id}</div>)}
+                    {games.map((game, i) => <div key={`${game.id}-${i}`} style={{ width: "300px", marginRight: "auto", textAlign: "left" }}><span className="cursor" style={{ color: (i !== gameSelectionIndex ? "transparent" : "white") }}>{'>'}</span>&nbsp;{game.id}</div>)}
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import { View } from './view'
 import { Controller } from './controller'
 import Storage from './storage'
 
-export class Dyanmic1GameManager {
+export class SnakeGameManager {
   view: View;
   game: Game;
   controller: Controller;
@@ -30,9 +30,10 @@ export class Dyanmic1GameManager {
       CONFIG.WIDTH,
       CONFIG.HEIGHT,
       CONFIG.SPEED,
+      CONFIG.SNAKE_LENGTH,
       new Vector(
-        CONFIG.PLAYER_DIRECTION_X,
-        CONFIG.PLAYER_DIRECTION_Y
+        CONFIG.SNAKE_DIRECTION_X,
+        CONFIG.SNAKE_DIRECTION_Y
       )
     )
     this.lastUpdate = undefined
@@ -51,8 +52,8 @@ export class Dyanmic1GameManager {
 
   render() {
     this.view.render(
-      this.game.reward,
-      this.game.get_player(),
+      this.game.food,
+      this.game.get_snake(),
       this.game.score,
       Storage.getBestScore()
     )

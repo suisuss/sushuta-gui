@@ -1,9 +1,8 @@
 
-import { GameManager } from './game-manager'
+import { Dyanmic1GameManager } from './game-manager'
 
-
-const main = (): GameManager => {
-    const gameManager = new GameManager()
+const main = () => {
+    const gameManager = new Dyanmic1GameManager()
     gameManager.run()
     return gameManager
 }

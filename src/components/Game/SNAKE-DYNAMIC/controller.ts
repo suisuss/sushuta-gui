@@ -20,8 +20,8 @@ export class Controller {
           this.movement = Movement.RIGHT
           return
         case 'Escape':
-          onStop()
-          return
+            onStop()
+            return
         default:
           return;
       }

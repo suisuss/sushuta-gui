@@ -43,7 +43,7 @@ export class View {
     canvas.setAttribute('height', this.projectDistance(this.gameHeight))
   }
 
-  render(food, player, score, bestScore) {
+  render(food, snake, score, bestScore) {
     this.context.clearRect(
       0,
       0,
@@ -67,11 +67,11 @@ export class View {
     )
     this.context.globalAlpha = 1
 
-    const projectedReward = this.projectPosition(food)
+    const projectedFood = this.projectPosition(food)
     this.context.beginPath()
     this.context.arc(
-      projectedReward.x,
-      projectedReward.y,
+      projectedFood.x,
+      projectedFood.y,
       this.unitOnScreen / 2.5,
       0,
       2 * Math.PI
@@ -79,25 +79,13 @@ export class View {
     this.context.fillStyle = '#e74c3c'
     this.context.fill()
 
-    const projectPlayer = this.projectPosition(player[0])
+    this.context.lineWidth = this.unitOnScreen
+    this.context.strokeStyle = '#3498db'
     this.context.beginPath()
-    this.context.arc(
-      projectPlayer.x,
-      projectPlayer.y,
-      this.unitOnScreen / 2.5,
-      0,
-      2 * Math.PI
-    )
-    this.context.fillStyle = '#e74c3c'
-    this.context.fill()
-
-    /*
-    const projectPlayer = this.projectPosition(player[0])
-    this.context.beginPath()
-    this.context.rect(projectPlayer.x, projectPlayer.y, this.unitOnScreen / 2.5, this.unitOnScreen / 2.5);
-    this.context.fillStyle = '#fff' // thats white!!
-    this.context.fill()
-    */
+    snake
+      .map(this.projectPosition)
+      .forEach(({ x, y }) => this.context.lineTo(x, y))
+    this.context.stroke()
 
     document.getElementById('current-score').innerText = score
     document.getElementById('best-score').innerText = bestScore
