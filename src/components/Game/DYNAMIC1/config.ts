@@ -1,8 +1,0 @@
-export default {
-  WIDTH: 17,
-  HEIGHT: 15,
-  SPEED: 0.006,
-  PLAYER_DIRECTION_X: 1,
-  PLAYER_DIRECTION_Y: 0,
-  FPS: 60
-}

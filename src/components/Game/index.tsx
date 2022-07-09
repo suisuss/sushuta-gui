@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios";
 import { createDecipher as decrypt } from "../../utils/encryptor";
-import SnakeGame from "../../assets/staticGames/snakeGame";
 
-import snakeWasmBindgen from "./SNAKE-DYNAMIC/wasmBindgen.js";
-import { SnakeGameManager } from "./SNAKE-DYNAMIC/game-manager";
-
-
-import dynamic1WasmBindgen from "./DYNAMIC1/wasmBindgen.js";
-import { Dyanmic1GameManager } from "./DYNAMIC1/game-manager";
+import dougWasmBindgen from "./DOUG/wasmBindgen.js"
 
 const algorithm = 'aes-256-cfb'
 
 // Different game type for different controller presets...
 export enum GameType {
-    STATIC,
-    SNAKE,
-    DYNAMIC0,
-    DYNAMIC1,
-    DYNAMIC3
+    DOUG
 }
 
 export interface GameObject {
     type: GameType,
-    id: string
+    id: string,
+    author: string,
+    rating: string,
+    source: string,
+    name: string
 }
 
 interface Props {
@@ -32,33 +26,24 @@ interface Props {
     setGameSelected: (data: GameObject | undefined) => void
 }
 
-interface GameInstace {
-    GameManager: GameManager
-    WASMBindgen: any
-}
 
 
 const getWasmBindgenAndGameModuleImportString = async (type: GameType) => {
     var run
     switch (type) {
-        case GameType.SNAKE:
-            run = await import('./SNAKE-DYNAMIC')
-            return [snakeWasmBindgen, run]
-        case GameType.DYNAMIC1:
-            run = await import('./DYNAMIC1')
-            return [dynamic1WasmBindgen, run]
+        case GameType.DOUG:
+            run = await import('./DOUG')
+            return [dougWasmBindgen, run.default]
         default:
             throw Error(`Invaild GameType: ${GameType[type]}`)
     }
 }
 
 
-type GameManager = SnakeGameManager | Dyanmic1GameManager
-
 const fetchGame = async (id: string, type: GameType, setGameInstance: any) => {
     console.log("FETCHING")
 
-
+    console.log(id)
     // Recieved encrypted game file
     const res = await axios.get(`http://localhost:4001/game/${id}`, {
         responseType: 'arraybuffer'
@@ -77,25 +62,28 @@ const fetchGame = async (id: string, type: GameType, setGameInstance: any) => {
     const blob = new Blob([decryptedWASM], { type: "application/wasm" });
     const url = URL.createObjectURL(blob);
 
-    const [wasmBindgen, game] = await getWasmBindgenAndGameModuleImportString(type)
-    const WASMBindgen = await wasmBindgen(url);
-    const GameManager = await game.default()
+    const [wasmBindgen, run] = await getWasmBindgenAndGameModuleImportString(type)
 
-    setGameInstance({ GameManager, WASMBindgen })
+    // Load game
+    await wasmBindgen.self(url);
+
+    const GameClientClass = wasmBindgen.GameClientClass
+
+    const canvas = document.getElementById('rustCanvas') as HTMLCanvasElement
+
+    const gameInstance = run(GameClientClass, canvas)
+
+    setGameInstance(gameInstance)
 
     window.URL.revokeObjectURL(url);
-
 
     return
 }
 
 const Game: React.FC<Props> = ({ type, id, setGameSelected }) => {
 
-    const [gameInstance, setGameInstance] = useState<GameInstace | undefined>()
-
-    if (type === GameType.STATIC) {
-        return <SnakeGame />
-    }
+    const [gameInstance, setGameInstance] = useState<any | undefined>()
+    console.log(gameInstance)
 
     const handleExit = () => {
         gameInstance.GameManager.onStop()
@@ -110,10 +98,8 @@ const Game: React.FC<Props> = ({ type, id, setGameSelected }) => {
     return (
         <>
             <button onClick={handleExit}>EXIT</button>
-            <p>TYPE: {`${type}`}</p>
-            <p>Now: <span id="current-score"></span></p>
-            <p>Best: <span id="best-score"></span></p>
-            <div id="container" />
+            <canvas id="rustCanvas" width={500} height={500}></canvas>
+            
         </>
     )
 }

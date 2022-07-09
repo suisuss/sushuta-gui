@@ -5,11 +5,24 @@ import Game, { GameObject, GameType } from "../components/Game";
 
 
 const games: GameObject[] = [
-    { type: GameType.STATIC, id: "snake-static" },
-    { type: GameType.SNAKE, id: "snake-dynamic" },
-    { type: GameType.SNAKE, id: "snake2-dynamic" },
-    { type: GameType.DYNAMIC1, id: "something-dynamic1" },
-    { type: GameType.DYNAMIC1, id: "something2-dynamic1" }
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
+    { type: GameType.DOUG, id: "id", name: "doug", author: "suisuss", source: "", rating: "1" },
 ]
 
 const GameSelect: React.FC = () => {
@@ -36,6 +49,24 @@ const GameSelect: React.FC = () => {
         if (event.key === "ArrowUp") {
 
             if (gameSelection === 0) {
+                setGameSelection(games.length - 1)
+            } else {
+                setGameSelection(gameSelection - 1)
+            }
+
+            console.log(`${games[gameSelectionIndex].id}-${gameSelectionIndex}`)
+
+            const test = document.getElementById(`${games[gameSelection].id}-${gameSelection}`)
+            console.log(test)
+            const test1 = test.focus()
+            console.log(test1)
+            return
+
+        }
+
+        if (event.key === "ArrowDown") {
+
+            if (gameSelection === 0) {
                 setGameSelection(gameSelection + 1)
 
             }
@@ -49,18 +80,7 @@ const GameSelect: React.FC = () => {
             }
             return
 
-        }
 
-        if (event.key === "ArrowDown") {
-
-            if (gameSelection === games.length - 1) {
-                setGameSelection(0)
-            } else if (gameSelection === 0) {
-                setGameSelection(games.length - 1)
-            } else {
-                setGameSelection(gameSelection - 1)
-            }
-            return
 
         }
 
@@ -86,10 +106,25 @@ const GameSelect: React.FC = () => {
         <div style={{ position: "absolute", width: "800px", height: "700px", top: "50%", left: "50%", transform: "translate(-50%, -50%)", display: "flex", flexDirection: "column" }}>
             <div className="text_shadows" style={{ fontSize: "72px" }} >SUSHUTA ARCADE</div>
             <div className="text_pulsate" style={{ fontSize: "24px", color: "white", fontFamily: "Bungee", width: "100%", display: "flex", flex: 1, flexDirection: "column", justifyContent: "flex-start" }}>
-                <div style={{ width: "400px", margin: "0 8rem auto auto" }}>
-                    <div style={{ width: "fit", marginBottom: "1rem", textAlign: "left" }}>SELECT A GAME:</div>
-                    {games.map((game, i) => <div key={`${game.id}-${i}`} style={{ width: "300px", marginRight: "auto", textAlign: "left" }}><span className="cursor" style={{ color: (i !== gameSelectionIndex ? "transparent" : "white") }}>{'>'}</span>&nbsp;{game.id}</div>)}
-                </div>
+                <table className="container">
+                    <thead>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Author</th>
+                        <th>Rating</th>
+                    </thead>
+                    <tbody>
+                        {games.map((game, i) => (
+                            <tr key={`${game.id}-${i}`} onClick={() => setGameSelected(games[i])} >
+                                <td>{game.id}</td>
+                                <td>{game.name}</td>
+                                <td>{game.author}</td>
+                                <td>{game.rating}</td>
+                            </tr>
+                        ))}
+
+                    </tbody>
+                </table>
             </div>
         </div>
     )
