@@ -13,7 +13,7 @@ import {
 } from "../connectors";
 
 import { useWeb3React } from "@web3-react/core";
-import { getNotifyBG, notify, ToasterMessage } from "../components/Toaster";
+import { getNotifyBG, notify, ToasterMessage } from "./Toaster";
 import { ResponseStatus } from "../interfaces";
 
 type Connector = any
@@ -147,16 +147,15 @@ const Login: React.FC = () => {
 
 
     return (
-        <div style={{ position: "absolute", width: "800px", height: "700px", top: "50%", left: "50%", transform: "translate(-50%, -50%)", display: "flex", flexDirection: "column" }}>
-            <div className="text_shadows">SUSHUTA</div>
-            <div className="text_shadows" style={{ fontSize: "72px" }}>ARCADE</div>
-            <div className="text_pulsate" style={{ fontSize: "24px", color: "white", fontFamily: "Bungee", width: "100%", display: "flex", flex: 1, flexDirection: "column", justifyContent: "flex-end" }}>
-                <div style={{ width: "400px", margin: "auto 10rem 0 auto" }}>
-                    <div style={{ width: "fit", marginBottom: "1rem", textAlign: "left" }}>Connect Your Wallet:</div>
-                    {wallets.map((wallet, i) => <div style={{ width: "300px", marginRight: "auto", textAlign: "left" }}><span className="cursor" style={{ color: (i !== walletSelection ? "transparent" : "white") }}>{'>'}</span>&nbsp;{wallet}</div>)}
-                </div>
+       <>
+        <div className="text_pulsate" style={{ fontSize: "24px", color: "white", fontFamily: "Bungee"}}>
+            <div style={{ width: "400px", margin: "auto 10rem 0 auto" }}>
+                <div style={{ width: "fit", marginBottom: "1rem", textAlign: "left" }}>Connect Your Wallet:</div>
+                {wallets.map((wallet, i) => <div key={wallet} style={{ width: "300px", marginRight: "auto", textAlign: "left" }}><span className="cursor" style={{ color: (i !== walletSelection ? "transparent" : "white") }}>{'>'}</span>&nbsp;{wallet}</div>)}
             </div>
         </div>
+        </>
+
     )
 }
 

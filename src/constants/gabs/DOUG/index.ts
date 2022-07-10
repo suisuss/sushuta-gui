@@ -14,8 +14,6 @@ const run = (GameClientClass: any, canvas: HTMLCanvasElement) => {
     const initialTime = Date.now();
     let lastDrawTime = -1;// In milliseconds
 
-    
-
     function render() {
         window.requestAnimationFrame(render);
         const currTime = Date.now();
@@ -29,6 +27,8 @@ const run = (GameClientClass: any, canvas: HTMLCanvasElement) => {
             gameClient.render();
         }
     }
+
+    
 
     render();
     return gameClient

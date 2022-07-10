@@ -5,11 +5,16 @@ import { Toaster } from 'react-hot-toast';
 import { getLibrary } from './utils'
 import App from './App';
 import './index.css';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+
 
 ReactDOM.render(
   <Web3ReactProvider getLibrary={getLibrary}>
-    <Toaster />
-    <App />
+    <Router>
+      <Toaster />
+      <App />
+    </Router>
   </Web3ReactProvider>,
   document.getElementById('root') as HTMLElement
 );
