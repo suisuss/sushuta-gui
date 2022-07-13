@@ -1,5 +1,6 @@
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { WalletLinkConnector } from "@web3-react/walletlink-connector";
+import { InjectedConnector } from "@web3-react/injected-connector";
 
 // const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
@@ -8,6 +9,10 @@ const RPC_URLS = {
 };
 
 const supportedChainIds = [1, 4]
+
+export const injected = new InjectedConnector({
+  supportedChainIds: supportedChainIds
+});
 
 export const walletconnect = new WalletConnectConnector({
   rpc: { 1: RPC_URLS[1] },

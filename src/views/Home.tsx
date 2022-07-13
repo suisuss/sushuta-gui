@@ -2,8 +2,7 @@ import { useWeb3React } from "@web3-react/core"
 import React from "react"
 import GameSelect from "../components/GameSelect"
 import Header from "../components/Header"
-import Login from "../components/Login"
-import { useNavigate } from "react-router-dom"
+import Connect from "../components/Connect"
 
 const dev = true
 
@@ -16,7 +15,8 @@ const Home: React.FC = () => {
     return (
         <>
             <Header />
-            {(account && active) || dev ? <GameSelect /> : <Login />}
+            <Connect />
+            { account && active && <GameSelect /> }
         </>
     )
 }

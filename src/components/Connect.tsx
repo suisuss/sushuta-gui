@@ -6,8 +6,9 @@ import {
     WalletConnectConnector,
 } from "@web3-react/walletconnect-connector";
 
-import { UnsupportedChainIdError, Web3ReactProvider } from "@web3-react/core";
+import { UnsupportedChainIdError } from "@web3-react/core";
 import {
+    injected,
     walletconnect,
     walletlink
 } from "../connectors";
@@ -15,6 +16,8 @@ import {
 import { useWeb3React } from "@web3-react/core";
 import { getNotifyBG, notify, ToasterMessage } from "./Toaster";
 import { ResponseStatus } from "../interfaces";
+import useEagerConnect from "../useEagerConnect";
+import { shortenAddress } from "../utils";
 
 type Connector = any
 
@@ -38,65 +41,14 @@ function getErrorMessage(error: any) {
 
 const connectorsByName: Record<string, Connector> = {
     'WalletConnect': walletconnect,
-    'WalletLink': walletlink
+    'WalletLink': walletlink,
+    'Metamask': injected
 };
 
 
-const Login: React.FC = () => {
+const Connect: React.FC = () => {
 
-    const wallets = ['WalletConnect', 'WalletLink']
-
-
-    const [walletSelection, _setWalletSelection] = useState(0)
-
-    const { error, account, setError, connector, deactivate, activate } = useWeb3React()
-
-    const walletSelectionRef = React.useRef(walletSelection);
-    const setWalletSelection = data => {
-        walletSelectionRef.current = data;
-        _setWalletSelection(data);
-    };
-
-    const handleKeyDown = (setWalletSelection) => (event) => {
-        const walletSelection = walletSelectionRef.current
-
-        if (event.key === "ArrowUp") {
-
-            if (walletSelection === 0) {
-                setWalletSelection(walletSelection + 1)
-
-            }
-            else if (walletSelection === wallets.length - 1) {
-                setWalletSelection(0)
-
-            }
-            else {
-                setWalletSelection(walletSelection + 1)
-
-            }
-            return
-
-        }
-
-        if (event.key === "ArrowDown") {
-
-            if (walletSelection === wallets.length - 1) {
-                setWalletSelection(0)
-            } else if (walletSelection === 0) {
-                setWalletSelection(wallets.length - 1)
-            } else {
-                setWalletSelection(walletSelection - 1)
-            }
-            return
-
-        }
-
-        if (event.key === "Enter") {
-            const currentConnector = connectorsByName[wallets[walletSelection]]
-            setActivatingConnector(currentConnector);
-            activate(currentConnector);
-        }
-    }
+    const { error, account, setError, connector, deactivate, activate, active } = useWeb3React()
 
     // handle logic to recognize the connector currently being activated
     const [activatingConnector, setActivatingConnector] = useState<any>();
@@ -105,19 +57,6 @@ const Login: React.FC = () => {
             setActivatingConnector(undefined);
         }
     }, [activatingConnector, connector]);
-
-
-    useEffect(() => {
-
-        window.addEventListener("keydown", handleKeyDown(setWalletSelection));
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown(setWalletSelection));
-        }
-
-
-    }, [])
-
 
     // log the walletconnect URI
     useEffect(() => {
@@ -145,18 +84,39 @@ const Login: React.FC = () => {
         deactivate()
     }
 
+    const triedEager = useEagerConnect();
 
     return (
-       <>
-        <div className="text_pulsate" style={{ fontSize: "24px", color: "white", fontFamily: "Bungee"}}>
-            <div style={{ width: "400px", margin: "auto 10rem 0 auto" }}>
-                <div style={{ width: "fit", marginBottom: "1rem", textAlign: "left" }}>Connect Your Wallet:</div>
-                {wallets.map((wallet, i) => <div key={wallet} style={{ width: "300px", marginRight: "auto", textAlign: "left" }}><span className="cursor" style={{ color: (i !== walletSelection ? "transparent" : "white") }}>{'>'}</span>&nbsp;{wallet}</div>)}
+        <>
+            <div className="text_pulsate" onClick={() => {
+                if (account && active) deactivate()
+            }} style={{ width: "100%", fontSize: "24px", color: "white", fontFamily: "Bungee", cursor: account && active ? 'pointer' : 'default'}}>
+                {account && active
+                    ? shortenAddress(account)
+                    : (
+                        <div style={{ display: "inline-block", margin: "auto", width: "fit-content" }}>
+                            {Object.keys(connectorsByName).map((name: string) => {
+                                const currentConnector = connectorsByName[name];
+                                const activating = currentConnector === activatingConnector;
+                                const connected = currentConnector === connector;
+                                const disabled = !triedEager || !!activatingConnector || connected || !!error;
+
+                                return (
+                                    <div onClick={() => {
+                                        if (disabled) { return }
+                                        setActivatingConnector(currentConnector);
+                                        activate(connectorsByName[name]);
+                                    }} key={name} style={{ cursor: "pointer", margin: "0 2rem", textAlign: "center" }}>{activating ? "Syncing..." : name.toUpperCase()}</div>
+                                );
+                            })
+                            }
+                        </div>
+                    )
+                }
             </div>
-        </div>
         </>
 
     )
 }
 
-export default Login
+export default Connect

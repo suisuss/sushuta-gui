@@ -216,12 +216,7 @@ div.toaster:hover {
   height: 1.25rem; 
 }
 
- 
- .container td {
-     font-weight: normal;
-     font-size: 1em;
- }
- 
+
  .container {
     text-align: center;
     max-width: 700px;
@@ -233,6 +228,8 @@ div.toaster:hover {
  .container td, .container th {
      padding: 1rem;
      text-align: center;
+     font-weight: normal;
+     font-size: 1em;
  }
 
  .container td {
@@ -241,25 +238,25 @@ div.toaster:hover {
  
 
  /* Background-color of the even rows */
- .container tr:nth-child(5n+1):hover {
+ .container tbody tr:nth-child(5n+1):hover {
      background-color: var(--color-1);
  }
 
- .container tr:nth-child(5n+2):hover  {
+ .container tbody tr:nth-child(5n+2):hover  {
   background-color: var(--color-2);
 }
-.container tr:nth-child(5n+3):hover   {
+.container tbody tr:nth-child(5n+3):hover   {
   background-color: var(--color-3);
 }
-.container tr:nth-child(5n+4):hover   {
+.container tbody tr:nth-child(5n+4):hover   {
   background-color: var(--color-4);
 }
-.container tr:nth-child(5n+5):hover   {
+.container tbody tr:nth-child(5n+5):hover   {
   background-color: var(--color-5);
   /* box-shadow: #7F7C21 -1px 1px, #7F7C21 -2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;*/
 } 
  
- .container tr:hover {
+ .container tbody tr:hover {
     color: #fff;
     font-weight: bold;
 
